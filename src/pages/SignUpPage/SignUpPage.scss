@@ -1,0 +1,18 @@
+
+
+.wr{
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  padding: 20px;
+  @media (max-width: 320px) {
+    padding: 15px;
+  }
+}
+
+.card{
+  display: flex;
+  flex-direction: column;
+  max-width: 340px;
+  width: 100%;
+}

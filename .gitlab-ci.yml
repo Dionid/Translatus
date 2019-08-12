@@ -1,0 +1,21 @@
+image: node:10.5.0
+
+before_script:
+  - apt-get update -qq && apt-get install
+
+pages:
+  stage: deploy
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - ls
+    - npm i
+    - npm run build:prod
+    - rm -rf public
+    - mv prod public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

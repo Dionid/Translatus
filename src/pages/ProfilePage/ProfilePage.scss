@@ -1,0 +1,64 @@
+
+
+.wrapper{
+  padding: 30px;
+  flex: 1;
+  width: 100%;
+  @media (max-width: 320px) {
+    padding: 15px;
+  }
+}
+
+.row{
+  //margin-bottom: 30px;
+}
+
+.col{
+  margin-bottom: 30px;
+  display: flex;
+}
+
+.card{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  :global{
+    .ant-card-head{
+      min-height: auto;
+    }
+    .ant-card-body{
+      height: 100%;
+      //display: flex;
+      //align-items: center;
+      font-size: 18px;
+    }
+  }
+  //&:global(.ant-card-loading){
+  //  :global(.ant-card-body){
+  //    display: block;
+  //  }
+  //}
+}
+
+
+.balanceBody{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .text{
+    //font-size: 18px;
+  }
+  @media (max-width: 320px) {
+    flex-direction: column;
+    justify-content: center;
+    .text{
+      margin-bottom: 15px;
+    }
+    :global{
+      .ant-btn{
+        width: 100%;
+      }
+    }
+  }
+}

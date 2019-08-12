@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "esnext",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["../src/*"],
+      "dvaApp": ["src/dvaApp/index.ts"],
+      "models": ["src/dvaApp/models/index.ts"],
+      "components/*": ["src/components/*"],
+      "pages/*": ["src/pages/*"],
+      "styles/*": ["src/styles/*"],
+      "assets/*": ["public/assets"],
+      "api": ["src/api/index"],
+      "api/*": ["src/api/*"]
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "env.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

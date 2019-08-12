@@ -1,0 +1,28 @@
+@import "styles/variables";
+@import "styles/mixins";
+//@import "./assets/fonts/index";
+
+
+:global{
+  *{
+    box-sizing: border-box;
+  }
+  body{
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,"Fira Sans","Roboto",Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  }
+  #root{
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    .ant-pagination-item-active{
+      background-color: #fff;
+    }
+  }
+  .ant-layout-content{
+    display: flex;
+  }
+  .ant-table{
+    border-radius: 5px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.05);
+  }
+}

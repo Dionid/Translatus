@@ -1,0 +1,167 @@
+
+
+.sider{
+  overflow: auto;
+  left: 0;
+  height: 100%;
+  .siderContent{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+  }
+  .menuContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .submenuContent{
+    display: none;
+  }
+  &.smallerHorTablet{
+    .submenuContent{
+      display: flex;
+    }
+  }
+}
+
+
+.logo{
+  height: 61px;
+  //padding-left: 15px;
+  color: #000;
+  font-size: 18px;
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  margin-right: auto;
+  margin-left: auto;
+  .icon{
+    background-color: #1890ff;
+    margin-right: 10px;
+    font-size: 16px;
+    color: #fff;
+    padding: 7px;
+    border-radius: 50%;
+  }
+}
+
+.headerWr{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  box-shadow: 0 3px 10px 0 rgba(25, 25, 34, 0.07);
+  .headerContent{
+    display: flex;
+    width: 100%;
+    max-width: 1440px;
+    flex-shrink: 1;
+    flex-grow: 1;
+
+  }
+  .menuContent{
+    display: flex;
+    //flex-shrink: 1;
+    //flex-grow: 1;
+    //width: 100%;
+    justify-content: space-between;
+    margin-left: auto;
+    &.hide{
+      display: none;
+    }
+  }
+  .menu{
+    padding-left: 45px;
+    line-height: 64px;
+    border-bottom: none;
+  }
+  .menuTrigger{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 15px;
+    background-color: #001529;
+    color: #fff;
+  }
+  .infobar{
+    display: flex;
+    .item{
+      line-height: 64px;
+      padding: 0 15px;
+      font-size: 13px;
+      //padding: 30px;
+    }
+  }
+  &.isTablet, &.isMobile{
+    .headerContent{
+      justify-content: space-between;
+    }
+    .menuContent{
+      flex-grow: 0;
+      display: none;
+    }
+    .menuTrigger{
+      display: flex;
+    }
+  }
+}
+
+.siderLayout{
+  justify-content: center;
+  background-color: #fff;
+  overflow-x: hidden;
+  .siderLayoutInner{
+    position: relative;
+    max-width: 1440px;
+    display: flex;
+    flex: auto;
+    width: 100%;
+    min-height: 0;
+    background: #f0f2f5;
+    padding-left: 200px;
+    >:global(.ant-layout){
+      width: 100%;
+    }
+  }
+  .affix{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    > div{
+      height: 100%;
+    }
+  }
+  &.smallerHorTablet{
+    .siderLayoutInner{
+      padding-left: 0;
+    }
+  }
+}
+
+.contentLayout{
+  //display: flex;
+  //width: 100%;
+  //align-items: center;
+  //padding-top: 15px;
+  :global{
+    .ant-layout-content{
+      //max-width: 1200px;
+      //width: 100%;
+    }
+  }
+}
+
+
+:global{
+  .ant-layout-sider-zero-width-trigger{
+    top: 0;
+    border-radius: 0;
+    border-bottom-right-radius: 5px;
+  }
+}
