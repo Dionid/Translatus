@@ -196,19 +196,13 @@ class AppLayout extends React.PureComponent<IProps, IState> {
         if (this.props.match.isExact) {
             this.props.history.push(this.props.match.url + "/translate")
         }
-        this.getInformation()
+        // . Ask for interface language
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         if (this.props.match.isExact) {
             this.props.history.push(this.props.match.url + "/translate")
         }
-    }
-
-    private getInformation = async () => {
-        // this.props.dispatch({
-        //     type: "profile/getData",
-        // })
     }
 
     private getSelectedKeys = (): string[] => {
@@ -226,13 +220,12 @@ class AppLayout extends React.PureComponent<IProps, IState> {
     public render() {
         const { theme, drawerCollapsed } = this.state
         const { match, media } = this.props
-        const { fullName, balance, paymentLink } = this.props.profile
-        const selectedKeys: string[] = this.getSelectedKeys()
+        // const selectedKeys: string[] = this.getSelectedKeys()
 
         return (
             <Layout style={{width: "100%"}} className={ cx("wrrapperLayout") }>
                 <Header
-                    style={{ background: theme === "light" ? "#fff" : "", padding: 0, zIndex: 1 }}
+                    style={{ background: theme === "light" ? "#fff" : "", padding: 0, zIndex: 1, height: 50 }}
                 >
                     <div className={ cx("headerWr", media.is.md && "isTablet", media.isMobile && "isMobile") }>
                         <div className={ cx("headerContent") }>

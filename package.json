@@ -80,6 +80,7 @@
     "dva-loading": "2.0.6",
     "react": "16.8.6",
     "react-dom": "16.8.6",
+    "react-intl": "^3.1.8",
     "redux-batched-actions": "0.4.1",
     "redux-responsive": "4.3.8",
     "reselect": "4.0.0",

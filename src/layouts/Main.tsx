@@ -57,7 +57,7 @@ class MainLayout extends React.PureComponent<IProps, IState> {
                     <Switch>
                         {/*<ProtectedRoute path="/app" component={AppLayout}/>*/}
                         <Route path="/app" component={AppLayout}/>
-                        <Route path="/auth" component={Auth}/>
+                        {/*<Route path="/auth" component={Auth}/>*/}
                     </Switch>
                 </Suspense>
             </ErrorBoundary>

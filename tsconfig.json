@@ -16,7 +16,7 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["../src/*"],
+      "src/*": ["src/*"],
       "dvaApp": ["src/dvaApp/index.ts"],
       "models": ["src/dvaApp/models/index.ts"],
       "components/*": ["src/components/*"],

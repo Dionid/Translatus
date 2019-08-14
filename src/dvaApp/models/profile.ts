@@ -57,7 +57,6 @@ const model: IExtraModel<IProfileState> = createHashModel({
                 = yield call(API.get, "/app/profile", payload)
 
             if (err) {
-                debugger
                 notification.error({
                     message: "Произошла ошибка!",
                     description: "Попробуйте войти чуть позже или обратитесь к администратору",
@@ -73,7 +72,6 @@ const model: IExtraModel<IProfileState> = createHashModel({
                 = yield call(API.get, "/app/payments/link", payload)
 
             if (err2) {
-                debugger
                 notification.error({
                     message: "Произошла ошибка!",
                     description: "Попробуйте войти чуть позже или обратитесь к администратору",

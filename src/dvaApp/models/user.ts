@@ -66,7 +66,7 @@ const model: IExtraModel<IUserState> = createHashModel({
                 return
             }
 
-            if (data) {
+            if (data && data.success) {
                 saveToken(data.success.access_token)
                 yield put({ type: "edit", payload: {isAuth: true}})
             }

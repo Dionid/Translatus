@@ -6,6 +6,7 @@ import {NavLink, RouteComponentProps, Switch, Route, match as IMatch} from "dva/
 import {Button, Col, Icon, Input, Row, Select} from 'antd'
 import IAppState, {IBrowserState} from "models"
 import styles from "./TranslatePage.scss"
+import {FormattedMessage} from "react-intl"
 
 const cx = classnamesBind.bind(styles)
 
@@ -13,36 +14,62 @@ const { TextArea } = Input;
 const InputGroup = Input.Group;
 const { Option } = Select;
 
+enum languageKeys {
+    rus = "rus",
+    eng = "eng",
+}
+
+interface languageObj {
+    id:  keyof typeof languageKeys
+    name: string
+}
+
+type language = {
+    [key in keyof typeof languageKeys]: languageObj
+}
+
+const languages: language = {
+    "rus": {
+        id: "rus",
+        name: "Русский",
+    },
+    "eng": {
+        id: "eng",
+        name: "Английский",
+    },
+}
+
 interface IProps extends RouteComponentProps {
     dispatch: Dispatch<Action>,
     media: IBrowserState,
 }
 
 interface IState {
-    translateAreaText: String,
+    translateAreaText: string,
     translateAreaTextChanged: boolean,
-    translatedText: String,
-}
-
-
-const languages = {
-    "rus": {
-        name: "Русский",
-    },
-    "eng": {
-        name: "Английский",
-    },
+    translatedText: string,
+    translateFromLanguage: languageObj,
+    translateToLanguage: languageObj,
 }
 
 class TranslatePage extends React.PureComponent<IProps, IState> {
 
-    state = {
+    resetState = {
         translateAreaText: "",
         translateAreaTextChanged: false,
-        translatedText: ""
+        translatedText: "",
     }
 
-    onTranslateAreaChange = (e) => {
+    state = {
+        ...this.resetState,
+        translateFromLanguage: languages["rus"],
+        translateToLanguage: languages["eng"],
+    }
+
+    componentDidMount(): void {
+    }
+
+    onTranslateAreaChange = (e: any) => {
         this.setState({
             translateAreaText: e.target.value,
             translateAreaTextChanged: true,
@@ -51,75 +78,155 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
 
     onClearClick = () => {
         this.setState({
-            translateAreaText: "",
-            translateAreaTextChanged: false,
-            translatedText: "",
+            ...this.resetState,
         })
+    }
+
+    translate = () => {
+
     }
 
     onTranslateClick = () => {
         this.setState({
             translateAreaTextChanged: false,
-            translatedText: this.state.translateAreaText,
+            translatedText: this.state.translateAreaText + " !!!",
+        })
+    }
+
+    translateFromLanguageOnChange = (v: languageKeys) => {
+        // Swap
+        if (v === this.state.translateToLanguage.id) {
+            this.setState({
+                translateToLanguage: this.state.translateFromLanguage,
+            })
+        }
+        this.setState({
+            translateFromLanguage: languages[v],
+        })
+    }
+
+    translateToLanguageOnChange = (v: keyof typeof languageKeys) => {
+        // Swap
+        if (v === this.state.translateFromLanguage.id) {
+            this.setState({
+                translateFromLanguage: this.state.translateToLanguage,
+            })
+        }
+        this.setState({
+            translateToLanguage: languages[v],
+        })
+    }
+
+    onSwapClick = () => {
+        const newState = {
+            translateFromLanguage: this.state.translateToLanguage,
+            translateToLanguage: this.state.translateFromLanguage,
+            translatedText: "",
+            translateAreaText: this.state.translateAreaText,
+        }
+        // If there is translated text, than use it as for translation
+        if (this.state.translatedText) {
+            newState.translateAreaText = this.state.translatedText
+        }
+
+        this.setState({
+            ...newState,
+        }, () => {
+            this.translate()
         })
     }
 
     render() {
-        const { translateAreaText, translateAreaTextChanged, translatedText } = this.state
+        const {
+            translateAreaText,
+            translateAreaTextChanged,
+            translatedText,
+            translateFromLanguage,
+            translateToLanguage,
+        } = this.state
+        const {
+            media,
+        } = this.props
 
         const showTranslateCtrl = translateAreaText !== "" || translatedText !== ""
 
         return (
-            <div style={{ width: "100%", display: "flex", flexDirection: "column", paddingTop: 30, alignItems: "center" }}>
+            <div style={{ padding: "30px 15px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{ width: "100%", maxWidth: 720,}}>
-                    <div>
-                        <InputGroup compact style={{display:"flex"}} size={"large"}>
-                            <Input
-                                size={"large"}
-                                style={{
-                                    width: "37px",
-                                    pointerEvents: 'none',
-                                    backgroundColor: '#fff',
-                                    borderRight: 0,
-                                }}
-                                prefix={ <Icon type="euro" /> }
-                            />
-                            <Select  showSearch size={"large"} style={{width: "50%"}} defaultValue={ Object.keys(languages)[0] }>
-                                {
-                                    Object.keys(languages).map(lang => {
-                                        return <Option value={lang} >{ languages[lang].name }</Option>
-                                    })
-                                }
-                            </Select>
-                            {/*<div style={{cursor: "pointer", width: 40, backgroundColor: "#fff", border: "1px solid rgb(217, 217, 217)", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                                <Icon type="swap" />
-                            </div>*/}
-                            <Button size="large" style={{marginRight: 0, marginLeft: -1, zIndex: 2,}}>
-                                <Icon type="swap" />
+                    <div className={ cx('languageCtrlWr', media.isMobile && 'mobile') }>
+                        <div style={{display: "flex", width: "100%", flexDirection: "column", paddingRight: 15}}>
+                            <InputGroup compact style={{display:"flex", paddingBottom: 15}} size={"large"}>
+                                <Input
+                                    size={"large"}
+                                    style={{
+                                        width: "37px",
+                                        pointerEvents: 'none',
+                                        backgroundColor: '#fff',
+                                        borderRight: 0,
+                                    }}
+                                    prefix={
+                                        <img className={ cx("translateIcon") } src={ require(`assets/${translateFromLanguage.id}_flag.png`) } alt=""/>
+                                    }
+                                />
+                                <Select
+                                    value={ translateFromLanguage.id as languageKeys }
+                                    onChange={ this.translateFromLanguageOnChange }
+                                    showSearch
+                                    size={"large"}
+                                    style={{width: "100%"}}>
+                                    {
+                                        Object.keys(languages).map((lang: string) => {
+                                            return <Option key={lang} value={lang} >{ languages[lang as languageKeys].name }</Option>
+                                        })
+                                    }
+                                </Select>
+                            </InputGroup>
+                            <InputGroup compact style={{display:"flex"}} size={"large"}>
+                                <Input
+                                    size={"large"}
+                                    style={{
+                                        width: "37px",
+                                        pointerEvents: 'none',
+                                        backgroundColor: '#fff',
+                                        marginLeft: -1,
+                                        zIndex: 1,
+                                    }}
+                                    prefix={ <img className={ cx("translateIcon") } src={ require(`assets/${translateToLanguage.id}_flag.png`) } alt=""/> }
+                                />
+                                <Select
+                                    onChange={ this.translateToLanguageOnChange }
+                                    value={ translateToLanguage.id as languageKeys }
+                                    size={"large"}
+                                    style={{zIndex: 1, width: "100%", borderLeft: 0}}>
+                                    {
+                                        Object.keys(languages).map(lang => {
+                                            return <Option key={lang} value={lang} >{ languages[lang as languageKeys].name }</Option>
+                                        })
+                                    }
+                                </Select>
+                            </InputGroup>
+                        </div>
+                        <div style={{
+                            // width: 40,
+                            display: "flex",
+                            flexShrink: 0,
+                            flexGrow: 0,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            // marginRight: media.isMobile ? 0 : 15,
+                            // marginLeft: media.isMobile ? 0 : 15,
+                            // marginTop: media.isMobile ? 15 : 0,
+                            // marginBottom: media.isMobile ? 15 : 0,
+                            // justifyContent: media.isMobile ? "center" : "initial",
+                        }}>
+                            <Button style={{height: "100%"}} size="large" onClick={ this.onSwapClick }>
+                                <Icon style={{transform: "rotate(90deg)"}} type="swap" />
                             </Button>
-                            <Input
-                                size={"large"}
-                                style={{
-                                    width: "37px",
-                                    pointerEvents: 'none',
-                                    backgroundColor: '#fff',
-                                    marginLeft: -1,
-                                    zIndex: 1,
-                                }}
-                                prefix={ <Icon type="dollar" /> }
-                            />
-                            <Select size={"large"} style={{zIndex: 1, width: "50%", borderLeft: 0}} defaultValue={ Object.keys(languages)[1] }>
-                                {
-                                    Object.keys(languages).map(lang => {
-                                        return <Option value={lang} >{ languages[lang].name }</Option>
-                                    })
-                                }
-                            </Select>
-                        </InputGroup>
+                        </div>
                     </div>
                     <div style={{display: "flex", flexDirection: "column", paddingTop: 15}}>
                         <div style={{width: "100%"}}>
-                            <TextArea value={ translateAreaText } onChange={ this.onTranslateAreaChange } rows={2} autosize style={{fontSize: 16, padding: "10px 15px", paddingBottom: 15, borderRadius: 0, borderBottom: 0, borderTopLeftRadius: 5, borderTopRightRadius: 5}} placeholder="Insert your text here" >
+                            <TextArea value={ translateAreaText } onChange={ this.onTranslateAreaChange } rows={2} autosize style={{fontSize: 16, padding: "10px 15px", paddingBottom: 15, borderRadius: 0, borderBottom: 0, borderTopLeftRadius: 5, borderTopRightRadius: 5}} placeholder="Сюда вводить текст" >
                             </TextArea>
                         </div>
                         <div style={{display: showTranslateCtrl ? "flex" : "none"}}>
@@ -128,8 +235,8 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
                         </div>
                         <div style={{width: "100%"}}>
                             <div style={{width: "100%", backgroundColor: "#fff", fontSize: 16, padding: "10px", paddingTop: 15, minHeight: 75, border: "1px solid #d9d9d9", borderTopWidth: !showTranslateCtrl && translatedText === "" ? 1 : 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
-                                <div>
-                                    { translatedText || "Здесь появится текст перевода" }
+                                <div style={{wordBreak: "break-word"}}>
+                                    { translatedText || <FormattedMessage id={'TranslatePage.translateAreaEmptyText'} /> }
                                 </div>
                             </div>
                         </div>
@@ -143,6 +250,6 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
     }
 }
 
-export default connect(({user, loading}: IAppState) => {
-    return {user}
+export default connect(({user, media, loading}: IAppState) => {
+    return {user, media}
 })(TranslatePage)
