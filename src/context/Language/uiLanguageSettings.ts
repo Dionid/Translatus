@@ -29,12 +29,14 @@ const uiLanguageSettings: uiLanguage = {
         antdLocal: ru_RU,
         messages: {
             "Test": "Тест",
+            "Nav.exitButtonText": "Выйти",
+            "Nav.interfaceLanguage": "Язык приложения:",
             "Languages.russian": "Руский",
             "Languages.english": "Английский",
             "TranslatePage.translatedEmptyText": "Здесь появится текст перевода",
             "TranslatePage.translateAreaTextPlaceholder": "Сюда вводить текст",
             "TranslatePage.buttonTranslateText": "Перевести",
-            "TranslatePage.buttonClearText": "Очистить"
+            "TranslatePage.buttonClearText": "Очистить",
         }
     },
     [uiLanguageKeys.eng]: {
@@ -44,6 +46,8 @@ const uiLanguageSettings: uiLanguage = {
         antdLocal: en_US,
         messages: {
             "Test": "Test",
+            "Nav.exitButtonText": "Exit",
+            "Nav.interfaceLanguage": "App language:",
             "Languages.russian": "Russian",
             "Languages.english": "English",
             "TranslatePage.translatedEmptyText": "Translation...",

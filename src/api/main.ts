@@ -5,6 +5,7 @@ import dvaApp from "dvaApp"
 interface ISuccessResp<ResDataT> {
     result?: ResDataT,
     error?: string,
+    fullResponse?: AxiosResponse,
 }
 
 export type IRequestResult<ResDataT> = [
@@ -51,9 +52,8 @@ const request = async <ResDataT>(url: string, settings: IRequestSettings): Promi
             url: makeUrl(url),
             ...settings,
         })
-        debugger
         if (settings.returnFullResponse) {
-            return [null, ({result: res as unknown as ResDataT})]
+            return [null, ({fullResponse: res})]
         } else {
             return [null, res.data]
         }

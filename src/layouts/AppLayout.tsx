@@ -10,6 +10,8 @@ import {SiderTheme} from "antd/lib/layout/Sider"
 import {IProfileState} from "../dvaApp/models/profile"
 import {MenuTheme} from "antd/lib/menu"
 import TranslatePage from "pages/TranslatePage/TranslatePage"
+import {FormattedMessage} from "react-intl"
+import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
 
 
 const ProfilePage = lazy(() => import("pages/ProfilePage/ProfilePage"))
@@ -37,7 +39,7 @@ const {
 const menuItems = [
     {
         title: "Translate",
-        icon: "user",
+        icon: "book",
         link: "translate",
         component: TranslatePage,
     },
@@ -112,9 +114,13 @@ const MainSider: FunctionComponent<IMainSiderProps> = ({
                             })
                         }
                     </Menu>
+                    <div style={{padding: 15}}>
+                        <FormattedMessage id={ "Nav.interfaceLanguage" }/>
+                        <UIChangeCtrl/>
+                    </div>
                 </div>
                 <div className={ cx("submenuContent") }>
-                    <ExitMenu theme={ theme }/>
+                    {/*<ExitMenu theme={ theme }/>*/}
                 </div>
             </div>
         </Sider>
@@ -171,7 +177,9 @@ const ExitMenu = ({ theme }: { theme: MenuTheme }) => {
             <Menu.Item className={ cx("menuItem") } key="logout">
                 <NavLink to={ "/auth/logout" }>
                     <Icon className={ cx("icon") } type="logout"/>
-                    <span className={ cx("text") }>Выйти</span>
+                    <span className={ cx("text") }>
+                        <FormattedMessage id={"Nav.exitButtonText"}/>
+                    </span>
                 </NavLink>
             </Menu.Item>
         </Menu>
@@ -220,7 +228,7 @@ class AppLayout extends React.PureComponent<IProps, IState> {
     public render() {
         const { theme, drawerCollapsed } = this.state
         const { match, media } = this.props
-        // const selectedKeys: string[] = this.getSelectedKeys()
+        const selectedKeys: string[] = this.getSelectedKeys()
 
         return (
             <Layout style={{width: "100%"}} className={ cx("wrrapperLayout") }>
@@ -230,14 +238,14 @@ class AppLayout extends React.PureComponent<IProps, IState> {
                     <div className={ cx("headerWr", media.is.md && "isTablet", media.isMobile && "isMobile") }>
                         <div className={ cx("headerContent") }>
                             <Logo/>
-                            {/*<div className={ cx("menuTrigger") }>
+                            <div className={ cx("menuTrigger") }>
                                 <Icon
                                     className="trigger"
                                     type={drawerCollapsed ? "menu-unfold" : "menu-fold"}
                                     onClick={this.toggleDrawerCollapsed}
                                 />
-                            </div>*/}
-                            {/*<div className={ cx("menuContent") }>*/}
+                            </div>
+                            <div className={ cx("menuContent") }>
                                 {/*
                                 <Menu
                                     selectedKeys={ selectedKeys }
@@ -269,30 +277,45 @@ class AppLayout extends React.PureComponent<IProps, IState> {
                                 {/*
                                 <ExitMenu theme={ theme }/>
                                 */}
-                            {/*</div>*/}
+                            </div>
                         </div>
                     </div>
                 </Header>
                 <Layout className={ cx("siderLayout", media.lessThan.lg && "smallerHorTablet") }>
-                    <Layout>
-                        <Suspense fallback={<LoadingComponent/>}>
-                            <Content>
-                                <Switch>
-                                    {
-                                        menuItems.map((menuItem) => {
-                                            return (
-                                                <Route
-                                                    key={menuItem.link}
-                                                    path={`${match.url}/${menuItem.link}`}
-                                                    component={menuItem.component}
-                                                />
-                                            )
-                                        })
-                                    }
-                                </Switch>
-                            </Content>
-                        </Suspense>
-                    </Layout>
+                    <div className={ cx("siderLayoutInner") }>
+                        <MainSiderWr
+                            drawerActive={ media.lessThan.lg }
+                            drawerCollapsed={ drawerCollapsed }
+                            toggleDrawerCollapsed={ this.toggleDrawerCollapsed }
+                        >
+                            <MainSider
+                                media={ media }
+                                theme={ theme }
+                                selectedKeys={ selectedKeys }
+                                match={ match }
+                                toggleDrawerCollapsed={ this.toggleDrawerCollapsed }
+                            />
+                        </MainSiderWr>
+                        <Layout>
+                            <Suspense fallback={<LoadingComponent/>}>
+                                <Content>
+                                    <Switch>
+                                        {
+                                            menuItems.map((menuItem) => {
+                                                return (
+                                                    <Route
+                                                        key={menuItem.link}
+                                                        path={`${match.url}/${menuItem.link}`}
+                                                        component={menuItem.component}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </Switch>
+                                </Content>
+                            </Suspense>
+                        </Layout>
+                    </div>
                 </Layout>
             </Layout>
         )

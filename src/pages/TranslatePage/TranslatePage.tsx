@@ -55,6 +55,7 @@ interface IState {
     translatedText: string,
     translateFromLanguage: languageObj,
     translateToLanguage: languageObj,
+    loading: boolean,
 }
 
 class TranslatePage extends React.PureComponent<IProps, IState> {
@@ -69,6 +70,7 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
         ...this.resetState,
         translateFromLanguage: languages["rus"],
         translateToLanguage: languages["eng"],
+        loading: false,
     }
 
     componentDidMount(): void {
@@ -89,18 +91,26 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
 
     translate = async () => {
         this.setState({
+            loading: true,
             translateAreaTextChanged: false,
             // translatedText: this.state.translateAreaText + " !!!",
         })
         console.log(this.state)
         const [err, resp] = await MainAPI.translate(this.state.translateFromLanguage.apiName, this.state.translateToLanguage.apiName, this.state.translateAreaText)
+        this.setState({
+            loading: false,
+        })
         if (err) {
             debugger
             console.log(err)
             return
         }
 
-        console.log(resp)
+        if (resp && resp.result) {
+            this.setState({
+                translatedText: resp.result,
+            })
+        }
     }
 
     onTranslateClick = () => {
@@ -157,6 +167,7 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
             translatedText,
             translateFromLanguage,
             translateToLanguage,
+            loading,
         } = this.state
         const {
             media,
@@ -166,10 +177,7 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
 
         return (
             <div style={{ padding: "30px 15px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{ width: "100%", maxWidth: 720,}}>
-                    <div>
-                        <UIChangeCtrl/>
-                    </div>
+                <div className={ cx(loading && 'loading') } style={{ width: "100%", maxWidth: 720,}}>
                     <div className={ cx('languageCtrlWr', media.isMobile && 'mobile') }>
                         <div style={{display: "flex", width: "100%", flexDirection: "column", paddingRight: 15}}>
                             <InputGroup compact style={{display:"flex", paddingBottom: 15}} size={"large"}>
@@ -260,7 +268,7 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
                         </div>
                         <div style={{width: "100%"}}>
                             <div style={{width: "100%", backgroundColor: "#fff", fontSize: 16, padding: "10px", paddingTop: 15, minHeight: 75, border: "1px solid #d9d9d9", borderTopWidth: !showTranslateCtrl && translatedText === "" ? 1 : 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
-                                <div style={{wordBreak: "break-word"}}>
+                                <div style={{wordBreak: "break-word", whiteSpace: "pre-wrap"}}>
                                     { translatedText || <FormattedMessage id={'TranslatePage.translatedEmptyText'} /> }
                                 </div>
                             </div>
