@@ -11,7 +11,7 @@ import {IProfileState} from "../dvaApp/models/profile"
 import {MenuTheme} from "antd/lib/menu"
 import TranslatePage from "pages/TranslatePage/TranslatePage"
 import {FormattedMessage} from "react-intl"
-import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
+import {UIChangeCtrl} from "components/UIChangeCtrl/UIChangeCtrl"
 import {ArgsProps} from "antd/es/notification"
 import {LanguageConsumer} from "src/context/Language/LanguageContext"
 
@@ -310,8 +310,8 @@ class AppLayout extends React.PureComponent<IProps, IState> {
                                             return (
                                                 <div style={{padding: 15}}>
                                                     <Card>
-                                                        <p style={{paddingBottom: 0}}>Selected language:</p>
-                                                        <UIChangeCtrl/>
+                                                        <p>Selected interface language / <br/>Выберите язык интерфейса:</p>
+                                                        <UIChangeCtrl withoutInitial/>
                                                     </Card>
                                                 </div>
                                             )

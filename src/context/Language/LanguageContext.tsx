@@ -5,7 +5,7 @@ import React from "react"
 import {LocaleProvider, notification} from "antd"
 import {IntlProvider} from 'react-intl'
 import {uiLanguageKeys, uiLanguageObj, uiLanguageSettings} from "src/context/Language/uiLanguageSettings"
-import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
+import {UIChangeCtrl} from "components/UIChangeCtrl/UIChangeCtrl"
 import {ArgsProps} from "antd/es/notification"
 
 

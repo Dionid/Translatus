@@ -1,7 +1,7 @@
 import {Action, Dispatch} from "redux"
 import React, {FunctionComponent} from "react"
 import {connect} from "dva"
-import styles from "./StateLess.scss"
+import styles from "./UIChangeCtrl.scss"
 import classnamesBind from "classnames/bind"
 import {LanguageConsumer} from "src/context/Language/LanguageContext"
 import {Input, Select} from "antd"

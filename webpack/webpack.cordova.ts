@@ -9,10 +9,12 @@ import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin"
 import UglifyJsPlugin from "uglifyjs-webpack-plugin"
 import CopyWebpackPlugin from "copy-webpack-plugin"
 import commonConfig from "./webpack.common"
+// @ts-ignore
+import TerserPlugin from "terser-webpack-plugin"
 
 const config = merge(commonConfig, {
     output: {
-        path: path.resolve(__dirname, "../kontrollpa/www"),
+        path: path.resolve(__dirname, "../translatus_cordova/www"),
         filename: "[name].[chunkhash].js",
     },
     mode: "production",
@@ -71,10 +73,14 @@ const config = merge(commonConfig, {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 cache: true,
                 parallel: true,
             }),
+            // new UglifyJsPlugin({
+            //     cache: true,
+            //     parallel: true,
+            // }),
             new OptimizeCSSAssetsPlugin({}),
         ],
         runtimeChunk: "single",

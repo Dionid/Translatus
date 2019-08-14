@@ -10,7 +10,7 @@ import path from "path"
 
 const config = merge(commonConfig, {
     output: {
-        path: path.resolve(__dirname, "../kontrollpa/www"),
+        path: path.resolve(__dirname, "../translatus_cordova/www"),
         filename: "[name].[hash].js",
     },
     mode: "development",

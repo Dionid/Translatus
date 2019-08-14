@@ -7,7 +7,7 @@ import {Button, Col, Icon, Input, Row, Select} from 'antd'
 import IAppState, {IBrowserState} from "models"
 import styles from "./TranslatePage.scss"
 import {FormattedMessage} from "react-intl"
-import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
+import {UIChangeCtrl} from "components/UIChangeCtrl/UIChangeCtrl"
 import {MainAPI} from "api/mainAPI"
 
 const cx = classnamesBind.bind(styles)
@@ -181,22 +181,23 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
                     <div className={ cx('languageCtrlWr', media.isMobile && 'mobile') }>
                         <div style={{display: "flex", width: "100%", flexDirection: "column", paddingRight: 15}}>
                             <InputGroup compact style={{display:"flex", paddingBottom: 15}} size={"large"}>
-                                <Input
-                                    size={"large"}
-                                    style={{
-                                        width: "37px",
-                                        pointerEvents: 'none',
-                                        backgroundColor: '#fff',
-                                        borderRight: 0,
-                                    }}
-                                    prefix={
-                                        <img className={ cx("translateIcon") } src={ require(`assets/${translateFromLanguage.id}_flag.png`) } alt=""/>
+                                <div style={{
+                                    width: "40px",
+                                    pointerEvents: 'none',
+                                    backgroundColor: '#fff',
+                                    borderRight: 0,
+                                    border: `1px solid #d9d9d9`,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}>
+                                    {
+                                        <img width={18} height={18} className={ cx("translateIcon") } src={ require(`assets/${translateFromLanguage.id}_flag.png`) } alt=""/>
                                     }
-                                />
+                                </div>
                                 <Select
                                     value={ translateFromLanguage.id as languageKeys }
                                     onChange={ this.translateFromLanguageOnChange }
-                                    showSearch
                                     size={"large"}
                                     style={{width: "100%"}}>
                                     {
@@ -207,17 +208,20 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
                                 </Select>
                             </InputGroup>
                             <InputGroup compact style={{display:"flex"}} size={"large"}>
-                                <Input
-                                    size={"large"}
-                                    style={{
-                                        width: "37px",
-                                        pointerEvents: 'none',
-                                        backgroundColor: '#fff',
-                                        marginLeft: -1,
-                                        zIndex: 1,
-                                    }}
-                                    prefix={ <img className={ cx("translateIcon") } src={ require(`assets/${translateToLanguage.id}_flag.png`) } alt=""/> }
-                                />
+                                <div style={{
+                                    width: "40px",
+                                    pointerEvents: 'none',
+                                    backgroundColor: '#fff',
+                                    borderRight: 0,
+                                    border: `1px solid #d9d9d9`,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}>
+                                    {
+                                        <img width={18} height={18} className={ cx("translateIcon") } src={ require(`assets/${translateToLanguage.id}_flag.png`) } alt=""/>
+                                    }
+                                </div>
                                 <Select
                                     onChange={ this.translateToLanguageOnChange }
                                     value={ translateToLanguage.id as languageKeys }
