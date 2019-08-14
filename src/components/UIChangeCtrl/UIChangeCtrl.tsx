@@ -11,6 +11,7 @@ const cx = classnamesBind.bind(styles)
 
 interface IProps {
     afterSelected?: () => void
+    withoutInitial?: boolean
 }
 
 const InputGroup = Input.Group;
@@ -18,7 +19,8 @@ const { Option } = Select;
 
 const UIChangeCtrl: FunctionComponent<IProps> = (props: IProps) => {
     const {
-        afterSelected
+        afterSelected,
+        withoutInitial
     } = props
 
     return (
@@ -31,22 +33,24 @@ const UIChangeCtrl: FunctionComponent<IProps> = (props: IProps) => {
                     }
                     return (
                         <InputGroup compact style={{display:"flex", paddingBottom: 15}} size={"large"}>
-                            <Input
-                                size={"large"}
-                                style={{
-                                    width: "37px",
-                                    pointerEvents: 'none',
-                                    backgroundColor: '#fff',
-                                    borderRight: 0,
-                                }}
-                                prefix={
-                                    <img width={18} height={18} className={ cx("translateIcon") } src={ require(`assets/${activeUILanguageSettings.id}_flag.png`) } alt=""/>
+                            <div style={{
+                                width: "40px",
+                                pointerEvents: 'none',
+                                backgroundColor: '#fff',
+                                borderRight: 0,
+                                border: `1px solid #d9d9d9`,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+                                {
+                                    !withoutInitial && <img width={18} height={18} className={ cx("translateIcon") } src={ require(`assets/${activeUILanguageSettings.id}_flag.png`) } alt=""/>
                                 }
-                            />
+                            </div>
                             <Select
-                                value={ activeUILanguageSettings.id }
+                                value={ withoutInitial ? undefined : activeUILanguageSettings.id }
+                                placeholder={ "Select language" }
                                 onChange={ onSelectChange }
-                                showSearch
                                 size={"large"}
                                 style={{width: "100%"}}>
                                 {
