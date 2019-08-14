@@ -20,3 +20,7 @@ npm run dev
 ```
 npm run build:prod
 ```
+
+```
+cd translatus_cordova && cordova run android --release -- --keystore=./translatus.keystore --storePassword=testtest --alias=translatus --password=testtest
+```
