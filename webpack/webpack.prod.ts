@@ -22,7 +22,7 @@ import TerserPlugin from "terser-webpack-plugin"
 
 const config = merge(commonConfig, {
     output: {
-        path: path.resolve(__dirname, "../prod"),
+        path: path.resolve(__dirname, "../docs"),
         filename: "[name].[contenthash].js",
     },
     mode: "production",
