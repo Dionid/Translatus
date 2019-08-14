@@ -99,6 +99,9 @@ const MainSider: FunctionComponent<IMainSiderProps> = ({
                         selectedKeys={ selectedKeys }
                         theme={ theme }
                         mode="inline">
+                        <Menu.Item key={ "closeMenu" }>
+                            <Icon type={ "close" }/> Закрыть меню
+                        </Menu.Item>
                         {
                             menuItems.map((menuItem) => {
                                 return (
@@ -241,7 +244,8 @@ class AppLayout extends React.PureComponent<IProps, IState> {
                             <div className={ cx("menuTrigger") }>
                                 <Icon
                                     className="trigger"
-                                    type={drawerCollapsed ? "menu-unfold" : "menu-fold"}
+                                    type={"setting"}
+                                    style={{fontSize: 18}}
                                     onClick={this.toggleDrawerCollapsed}
                                 />
                             </div>

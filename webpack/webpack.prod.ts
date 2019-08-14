@@ -17,6 +17,8 @@ import ManifestPlugin from "webpack-manifest-plugin"
 // @ts-ignore
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin"
 import commonConfig from "./webpack.common"
+// @ts-ignore
+import TerserPlugin from "terser-webpack-plugin"
 
 const config = merge(commonConfig, {
     output: {
@@ -79,10 +81,14 @@ const config = merge(commonConfig, {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 cache: true,
                 parallel: true,
             }),
+            // new UglifyJsPlugin({
+            //     cache: true,
+            //     parallel: true,
+            // }),
             new OptimizeCSSAssetsPlugin({}),
         ],
         runtimeChunk: "single",

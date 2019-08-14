@@ -158,6 +158,13 @@
   }
 }
 
+.trigger{
+  transition: 0.1s;
+  &:hover{
+    transform: rotate(90deg);
+  }
+}
+
 
 :global{
   .ant-layout-sider-zero-width-trigger{
