@@ -4,51 +4,10 @@ import en_US from "antd/lib/locale-provider/en_US"
 import React from "react"
 import {LocaleProvider} from "antd"
 import {IntlProvider} from 'react-intl'
-
-export enum uiLanguageKeys {
-    rus = "ru",
-    eng = "eng",
-}
-
-interface uiLanguageObj {
-    id: uiLanguageKeys
-    locale: uiLanguageKeys
-    name: string
-    antdLocal: Locale,
-    messages: {
-        [key: string]: string,
-    }
-}
-
-type uiLanguage = {
-    [key in uiLanguageKeys]: uiLanguageObj
-}
-
-const uiLanguages: uiLanguage = {
-    [uiLanguageKeys.rus]: {
-        id: uiLanguageKeys.rus,
-        locale: uiLanguageKeys.rus,
-        name: "Русский",
-        antdLocal: ru_RU,
-        messages: {
-            "Test": "Тест",
-            "TranslatePage.translateAreaEmptyText": "Здесь появится текст перевода",
-        }
-    },
-    [uiLanguageKeys.eng]: {
-        id: uiLanguageKeys.eng,
-        locale: uiLanguageKeys.eng,
-        name: "English",
-        antdLocal: en_US,
-        messages: {
-            "Test": "Test",
-            "TranslatePage.translateAreaEmptyText": "Translation...",
-        }
-    },
-}
+import {uiLanguageKeys, uiLanguageObj, uiLanguageSettings} from "src/context/Language/uiLanguageSettings"
 
 const LanguageContext = React.createContext({
-    uiLanguageSettings: uiLanguages.eng,
+    activeUILanguageSettings: uiLanguageSettings.eng,
     updateUILanguage: (value: uiLanguageKeys) => {
         alert("not function haven't been implemented yet!")
     },
@@ -56,31 +15,31 @@ const LanguageContext = React.createContext({
 const LanguageConsumer = LanguageContext.Consumer
 
 interface LanguageProviderState {
-    uiLanguageSettings: uiLanguageObj
+    activeUILanguageSettings: uiLanguageObj
 }
 
 class LanguageProvider extends React.PureComponent<{}, LanguageProviderState> {
     state = {
-        uiLanguageSettings: uiLanguages.ru,
+        activeUILanguageSettings: uiLanguageSettings.rus,
     }
 
     updateUILanguage = (value: uiLanguageKeys) => {
         this.setState({
-            uiLanguageSettings: uiLanguages[value],
+            activeUILanguageSettings: uiLanguageSettings[value],
         })
     }
 
     render() {
-        const {uiLanguageSettings} = this.state
+        const {activeUILanguageSettings} = this.state
         return (
             <LanguageContext.Provider
                 value={{
-                    uiLanguageSettings: uiLanguageSettings,
+                    activeUILanguageSettings: activeUILanguageSettings,
                     updateUILanguage: this.updateUILanguage,
                 }}
             >
-                <LocaleProvider locale={uiLanguageSettings.antdLocal}>
-                    <IntlProvider locale={uiLanguageSettings.locale} messages={uiLanguageSettings.messages}>
+                <LocaleProvider locale={activeUILanguageSettings.antdLocal}>
+                    <IntlProvider locale={activeUILanguageSettings.locale} messages={activeUILanguageSettings.messages}>
                         {this.props.children}
                     </IntlProvider>
                 </LocaleProvider>

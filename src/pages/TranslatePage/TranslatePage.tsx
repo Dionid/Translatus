@@ -7,6 +7,7 @@ import {Button, Col, Icon, Input, Row, Select} from 'antd'
 import IAppState, {IBrowserState} from "models"
 import styles from "./TranslatePage.scss"
 import {FormattedMessage} from "react-intl"
+import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
 
 const cx = classnamesBind.bind(styles)
 
@@ -21,7 +22,7 @@ enum languageKeys {
 
 interface languageObj {
     id:  keyof typeof languageKeys
-    name: string
+    name: React.Component<{},{},any>,
 }
 
 type language = {
@@ -31,11 +32,11 @@ type language = {
 const languages: language = {
     "rus": {
         id: "rus",
-        name: "Русский",
+        name: <FormattedMessage id={"Languages.russian"}/>,
     },
     "eng": {
         id: "eng",
-        name: "Английский",
+        name: <FormattedMessage id={"Languages.english"}/>,
     },
 }
 
@@ -153,6 +154,9 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
         return (
             <div style={{ padding: "30px 15px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{ width: "100%", maxWidth: 720,}}>
+                    <div>
+                        <UIChangeCtrl/>
+                    </div>
                     <div className={ cx('languageCtrlWr', media.isMobile && 'mobile') }>
                         <div style={{display: "flex", width: "100%", flexDirection: "column", paddingRight: 15}}>
                             <InputGroup compact style={{display:"flex", paddingBottom: 15}} size={"large"}>
@@ -207,17 +211,11 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
                             </InputGroup>
                         </div>
                         <div style={{
-                            // width: 40,
                             display: "flex",
                             flexShrink: 0,
                             flexGrow: 0,
                             justifyContent: "center",
                             alignItems: "center",
-                            // marginRight: media.isMobile ? 0 : 15,
-                            // marginLeft: media.isMobile ? 0 : 15,
-                            // marginTop: media.isMobile ? 15 : 0,
-                            // marginBottom: media.isMobile ? 15 : 0,
-                            // justifyContent: media.isMobile ? "center" : "initial",
                         }}>
                             <Button style={{height: "100%"}} size="large" onClick={ this.onSwapClick }>
                                 <Icon style={{transform: "rotate(90deg)"}} type="swap" />
@@ -226,24 +224,35 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
                     </div>
                     <div style={{display: "flex", flexDirection: "column", paddingTop: 15}}>
                         <div style={{width: "100%"}}>
-                            <TextArea value={ translateAreaText } onChange={ this.onTranslateAreaChange } rows={2} autosize style={{fontSize: 16, padding: "10px 15px", paddingBottom: 15, borderRadius: 0, borderBottom: 0, borderTopLeftRadius: 5, borderTopRightRadius: 5}} placeholder="Сюда вводить текст" >
-                            </TextArea>
+                            <FormattedMessage id={"TranslatePage.translateAreaTextPlaceholder"}>
+                                {
+                                    (placeholder: string) => (
+                                      <TextArea value={ translateAreaText }
+                                                onChange={ this.onTranslateAreaChange }
+                                                rows={2}
+                                                autosize
+                                                style={{fontSize: 16, padding: "10px 15px", paddingBottom: 15, borderRadius: 0, borderBottom: 0, borderTopLeftRadius: 5, borderTopRightRadius: 5}}
+                                                placeholder={ placeholder }/>
+                                    )
+                                }
+                            </FormattedMessage>
                         </div>
                         <div style={{display: showTranslateCtrl ? "flex" : "none"}}>
-                            <Button onClick={ this.onTranslateClick } icon="check" disabled={ !translateAreaTextChanged || translateAreaText == "" } size={"large"} style={{borderRadius: 0, borderRight: 0}} block type={"primary"}>Перевести</Button>
-                            <Button onClick={ this.onClearClick } icon="close" size={"large"} style={{borderRadius: 0}} block>Очистить</Button>
+                            <Button onClick={ this.onTranslateClick } icon="check" disabled={ !translateAreaTextChanged || translateAreaText == "" } size={"large"} style={{borderRadius: 0, borderRight: 0}} block type={"primary"}>
+                                <FormattedMessage id={"TranslatePage.buttonTranslateText"}/>
+                            </Button>
+                            <Button onClick={ this.onClearClick } icon="close" size={"large"} style={{borderRadius: 0}} block>
+                                <FormattedMessage id={"TranslatePage.buttonClearText"}/>
+                            </Button>
                         </div>
                         <div style={{width: "100%"}}>
                             <div style={{width: "100%", backgroundColor: "#fff", fontSize: 16, padding: "10px", paddingTop: 15, minHeight: 75, border: "1px solid #d9d9d9", borderTopWidth: !showTranslateCtrl && translatedText === "" ? 1 : 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
                                 <div style={{wordBreak: "break-word"}}>
-                                    { translatedText || <FormattedMessage id={'TranslatePage.translateAreaEmptyText'} /> }
+                                    { translatedText || <FormattedMessage id={'TranslatePage.translatedEmptyText'} /> }
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div style={{position: "fixed", bottom: 100}}>
-
                 </div>
             </div>
         )
