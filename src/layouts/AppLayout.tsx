@@ -5,13 +5,15 @@ import IAppState, {IBrowserState} from "models"
 import styles from "./AppLayout.scss"
 import classnamesBind from "classnames/bind"
 import {NavLink, RouteComponentProps, Switch, Route, match as IMatch} from "dva/router"
-import {Button, Drawer, Icon, Layout, Menu, Affix} from "antd"
+import {Button, Drawer, Icon, Layout, Menu, Affix, notification, Card} from "antd"
 import {SiderTheme} from "antd/lib/layout/Sider"
 import {IProfileState} from "../dvaApp/models/profile"
 import {MenuTheme} from "antd/lib/menu"
 import TranslatePage from "pages/TranslatePage/TranslatePage"
 import {FormattedMessage} from "react-intl"
 import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
+import {ArgsProps} from "antd/es/notification"
+import {LanguageConsumer} from "src/context/Language/LanguageContext"
 
 
 const ProfilePage = lazy(() => import("pages/ProfilePage/ProfilePage"))
@@ -99,8 +101,8 @@ const MainSider: FunctionComponent<IMainSiderProps> = ({
                         selectedKeys={ selectedKeys }
                         theme={ theme }
                         mode="inline">
-                        <Menu.Item key={ "closeMenu" }>
-                            <Icon type={ "close" }/> Закрыть меню
+                        <Menu.Item onClick={ toggleDrawerCollapsed } key={ "closeMenu" }>
+                            <Icon type={ "close" }/> <FormattedMessage id={ "Nav.closeMenuButtonText" }/>
                         </Menu.Item>
                         {
                             menuItems.map((menuItem) => {
@@ -119,7 +121,7 @@ const MainSider: FunctionComponent<IMainSiderProps> = ({
                     </Menu>
                     <div style={{padding: 15}}>
                         <FormattedMessage id={ "Nav.interfaceLanguage" }/>
-                        <UIChangeCtrl/>
+                        <UIChangeCtrl afterSelected={ toggleDrawerCollapsed }/>
                     </div>
                 </div>
                 <div className={ cx("submenuContent") }>
@@ -301,23 +303,40 @@ class AppLayout extends React.PureComponent<IProps, IState> {
                             />
                         </MainSiderWr>
                         <Layout>
-                            <Suspense fallback={<LoadingComponent/>}>
-                                <Content>
-                                    <Switch>
-                                        {
-                                            menuItems.map((menuItem) => {
-                                                return (
-                                                    <Route
-                                                        key={menuItem.link}
-                                                        path={`${match.url}/${menuItem.link}`}
-                                                        component={menuItem.component}
-                                                    />
-                                                )
-                                            })
+                            <LanguageConsumer>
+                                {
+                                    ({langHasBeenSelected}) => {
+                                        if (!langHasBeenSelected) {
+                                            return (
+                                                <div style={{padding: 15}}>
+                                                    <Card>
+                                                        <p style={{paddingBottom: 0}}>Selected language:</p>
+                                                        <UIChangeCtrl/>
+                                                    </Card>
+                                                </div>
+                                            )
+                                        } else {
+                                            return <Suspense fallback={<LoadingComponent/>}>
+                                                <Content>
+                                                    <Switch>
+                                                        {
+                                                            menuItems.map((menuItem) => {
+                                                                return (
+                                                                    <Route
+                                                                        key={menuItem.link}
+                                                                        path={`${match.url}/${menuItem.link}`}
+                                                                        component={menuItem.component}
+                                                                    />
+                                                                )
+                                                            })
+                                                        }
+                                                    </Switch>
+                                                </Content>
+                                            </Suspense>
                                         }
-                                    </Switch>
-                                </Content>
-                            </Suspense>
+                                    }
+                                }
+                            </LanguageConsumer>
                         </Layout>
                     </div>
                 </Layout>

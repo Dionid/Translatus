@@ -30,6 +30,7 @@ const uiLanguageSettings: uiLanguage = {
         messages: {
             "Test": "Тест",
             "Nav.exitButtonText": "Выйти",
+            "Nav.closeMenuButtonText": "Закрыть меню",
             "Nav.interfaceLanguage": "Язык приложения:",
             "Languages.russian": "Руский",
             "Languages.english": "Английский",
@@ -46,6 +47,7 @@ const uiLanguageSettings: uiLanguage = {
         antdLocal: en_US,
         messages: {
             "Test": "Test",
+            "Nav.closeMenuButtonText": "Close menu",
             "Nav.exitButtonText": "Exit",
             "Nav.interfaceLanguage": "App language:",
             "Languages.russian": "Russian",
