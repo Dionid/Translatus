@@ -1,9 +1,18 @@
 import {getToken} from "./mainToken"
 import axios, {AxiosError, AxiosResponse, AxiosRequestConfig, AxiosPromise} from "axios"
 import dvaApp from "dvaApp"
-import {IRequestResult} from "api"
 
-const ROOT_URL = "https://kontrol112.ru:9000/api"
+interface ISuccessResp<ResDataT> {
+    result?: ResDataT,
+    error?: string,
+}
+
+export type IRequestResult<ResDataT> = [
+    AxiosError | null,
+    ISuccessResp<ResDataT> | null
+]
+
+const ROOT_URL = "http://31.148.223.10:8111"
 
 interface IRequestSettings extends AxiosRequestConfig {
     returnFullResponse: boolean,
@@ -42,15 +51,13 @@ const request = async <ResDataT>(url: string, settings: IRequestSettings): Promi
             url: makeUrl(url),
             ...settings,
         })
+        debugger
         if (settings.returnFullResponse) {
-            return [null, ({success: res as unknown as ResDataT})]
+            return [null, ({result: res as unknown as ResDataT})]
         } else {
             return [null, res.data]
         }
     } catch (err) {
-        // if (!err) {
-        //     return [ new Error(), null ]
-        // }
         if (err.response && err.response.status && err.response.status === 401) {
             // This place to logout user
             dvaApp._store.dispatch({

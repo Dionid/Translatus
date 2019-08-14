@@ -8,6 +8,7 @@ import IAppState, {IBrowserState} from "models"
 import styles from "./TranslatePage.scss"
 import {FormattedMessage} from "react-intl"
 import {UIChangeCtrl} from "components/UIChangeCtrl/StateLess"
+import {MainAPI} from "api/mainAPI"
 
 const cx = classnamesBind.bind(styles)
 
@@ -22,7 +23,8 @@ enum languageKeys {
 
 interface languageObj {
     id:  keyof typeof languageKeys
-    name: React.Component<{},{},any>,
+    apiName: string
+    name: React.Component<{},{},any>
 }
 
 type language = {
@@ -32,10 +34,12 @@ type language = {
 const languages: language = {
     "rus": {
         id: "rus",
+        apiName: "ru",
         name: <FormattedMessage id={"Languages.russian"}/>,
     },
     "eng": {
         id: "eng",
+        apiName: "en",
         name: <FormattedMessage id={"Languages.english"}/>,
     },
 }
@@ -83,15 +87,24 @@ class TranslatePage extends React.PureComponent<IProps, IState> {
         })
     }
 
-    translate = () => {
+    translate = async () => {
+        this.setState({
+            translateAreaTextChanged: false,
+            // translatedText: this.state.translateAreaText + " !!!",
+        })
+        console.log(this.state)
+        const [err, resp] = await MainAPI.translate(this.state.translateFromLanguage.apiName, this.state.translateToLanguage.apiName, this.state.translateAreaText)
+        if (err) {
+            debugger
+            console.log(err)
+            return
+        }
 
+        console.log(resp)
     }
 
     onTranslateClick = () => {
-        this.setState({
-            translateAreaTextChanged: false,
-            translatedText: this.state.translateAreaText + " !!!",
-        })
+        this.translate()
     }
 
     translateFromLanguageOnChange = (v: languageKeys) => {
